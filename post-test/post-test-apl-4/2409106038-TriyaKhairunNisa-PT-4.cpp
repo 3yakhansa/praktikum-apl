@@ -57,8 +57,12 @@ int Login(User users[], int jumlahUser) {
         }
         cout << RED << "Login gagal! Coba lagi.\n" << RESET << endl;
         if (login == 3) {
-            cout << RED << "Akses ditolak!\n" << RESET << endl;
-            return -1;
+            cout << RED << "Akses ditolak!" << RESET << endl;
+            cout << YELLOW << "Anda Keluar dari Program, bye bye :D";
+            cout << " /\\_/\\  " << endl;
+            cout << "( o.o ) " << endl;
+            cout << " > ^ <  " << endl << RESET;
+            exit(0);
         }
     }
     return -1;
@@ -88,7 +92,7 @@ void menu_utama(User &user) {
             case 3: ubahKomik(user); break;
             case 4: hapusKomik(user); break;
             case 5:
-                cout << YELLOW << "Logout berhasil!" << RESET << endl;
+                cout << YELLOW << "Kembali ke Menu Login." << RESET << endl;
                 return;
             default:
                 cout << RED << "Pilihan tidak valid!" << RESET << endl;
