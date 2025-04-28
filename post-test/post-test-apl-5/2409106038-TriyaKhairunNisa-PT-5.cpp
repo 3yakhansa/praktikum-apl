@@ -72,10 +72,6 @@ void tambahKomik(User *user);
 void tampilkanKomik(User *user, int index);
 void ubahKomik(User &user);
 void hapusKomik(User &user);
-void bubbleSortDesc(User &user);
-void sortKomikByTahun(User &user);
-void sortKomikByRating(User &user);
-
 
 void menu_utama(User &user) {
     int pilihan;
@@ -85,21 +81,17 @@ void menu_utama(User &user) {
         cout << "2. Lihat Data Komik" << endl;
         cout << "3. Ubah Data Komik" << endl;
         cout << "4. Hapus Data Komik" << endl;
-        cout << "5. Urutkan Komik berdasarkan Tahun Terbit" << endl;
-        cout << "6. Urutkan Komik berdasarkan Rating" << endl;
-        cout << "7. Keluar" << endl;
+        cout << "5. Keluar" << endl;
         cout << "Pilihan: " << RESET; 
         cin >> pilihan;
         cin.ignore();
 
         switch (pilihan) {
             case 1: tambahKomik(&user); break;
-            case 2: bubbleSortDesc(user); tampilkanKomik(&user, 0); break;
+            case 2: tampilkanKomik(&user, 0); break;
             case 3: ubahKomik(user); break;
             case 4: hapusKomik(user); break;
-            case 5: sortKomikByTahun(user); tampilkanKomik(&user, 0); break;
-            case 6: sortKomikByRating(user); tampilkanKomik(&user, 0); break;
-            case 7: 
+            case 5:
                 cout << YELLOW << "Kembali ke Menu Login." << RESET << endl;
                 return;
             default:
@@ -128,21 +120,19 @@ void tambahKomik(User *user) {
 }
 
 void tampilkanKomik(User *user, int index) {
-    if (user->jumlahKomik == 0) {
-        cout << YELLOW << "Belum ada komik." << RESET << endl;
-        return;
+        if (user->jumlahKomik == 0) {
+            cout << YELLOW << "Belum ada komik." << RESET << endl;
+            return;
+        }
+        if (index == user->jumlahKomik) return;
+        Komik *k = &user->koleksi[index];
+        cout << MAGENTA << "+----------------------------------------------------------+\n";
+        cout << "| " << index + 1 << ". Judul: " << k->judul  << " | Rating: " << k->rating << " | Tahun terbit: " << k->tahun_terbit << " |\n";
+        cout << "+----------------------------------------------------------+\n" << RESET;
+    
+        tampilkanKomik(user, index + 1); 
     }
-
-    if (index == user->jumlahKomik) return;
-
-    Komik *k = &user->koleksi[index];
-    cout << MAGENTA << "+----------------------------------------------------------+\n";
-    cout << "| " << index + 1 << ". Judul: " << k->judul  << " | Rating: " << k->rating << " | Tahun terbit: " << k->tahun_terbit << " |\n";
-    cout << "+----------------------------------------------------------+\n" << RESET;
-
-    tampilkanKomik(user, index + 1);
-}
-
+    
 void ubahKomik(User &user) {
     tampilkanKomik(&user, 0);
     int index;
@@ -158,7 +148,7 @@ void ubahKomik(User &user) {
     getline(cin, k.judul);
     cout << "Masukkan rating komik baru: ";
     cin >> k.rating;
-    cout << "Masukkan tahun terbit komik baru: ";
+    cout << "Masukkan tahun tahun komik baru: ";
     cin >> k.tahun_terbit;
     cout << CYAN << "Data komik berhasil diubah!" << RESET << endl;
 }
@@ -178,77 +168,6 @@ void hapusKomik(User &user) {
     user.jumlahKomik--;
     cout << CYAN << "Data komik berhasil dihapus!" << RESET << endl;
 }
-
-void bubbleSortDesc(User &user) {
-    int n = user.jumlahKomik;
-
-    if (n == 0) {
-        cout << YELLOW << "Belum ada komik untuk diurutkan." << RESET << endl;
-        return;
-    }
-
-    for (int i = 0; i < n; i++) {
-        for (int j = 0; j < (n - i - 1); j++) {
-            if (user.koleksi[j].judul < user.koleksi[j + 1].judul) {
-                Komik temp = user.koleksi[j];
-                user.koleksi[j] = user.koleksi[j + 1];
-                user.koleksi[j + 1] = temp;
-            }
-        }
-    }
-}
-
-void quickSort(Komik koleksi[], int low, int high) {
-    if (low < high) {
-        float pivot = koleksi[high].rating; 
-        int i = low - 1;
-
-        for (int j = low; j < high; j++) {
-            if (koleksi[j].rating <= pivot) { 
-                i++;
-                Komik temp = koleksi[i];
-                koleksi[i] = koleksi[j];
-                koleksi[j] = temp;
-            }
-        }
-
-        Komik temp = koleksi[i + 1];
-        koleksi[i + 1] = koleksi[high];
-        koleksi[high] = temp;
-
-        int partitionIndex = i + 1;
-
-        quickSort(koleksi, low, partitionIndex - 1);
-        quickSort(koleksi, partitionIndex + 1, high);
-    }
-}
-
-void sortKomikByRating(User &user) {
-    quickSort(user.koleksi, 0, user.jumlahKomik - 1);
-}
-
-
-void sortKomikByTahun(User &user) {
-    int n = user.jumlahKomik;
-    for (int i = 1; i < n; i++) {
-        Komik key = user.koleksi[i];
-        int j = i - 1;
-
-        while (j >= 0 && user.koleksi[j].tahun_terbit > key.tahun_terbit) {
-            user.koleksi[j + 1] = user.koleksi[j];
-            j--;
-        }
-
-        user.koleksi[j + 1] = key;
-
-        cout << "Tahap ke-" << i << ": ";
-        for (int k = 0; k < n; k++) {
-            cout << user.koleksi[k].tahun_terbit << " ";
-        }
-        cout << endl;
-    }
-}
-
 
 int main() {
     int pilih;
@@ -271,10 +190,10 @@ int main() {
                 break;
             }
             case 3:
-                cout << YELLOW << "Anda Keluar dari Program, bye bye :D\n";
-                cout << " /\\_/\\  " << endl;
-                cout << "( o.o ) " << endl;
-                cout << " > ^ <  " << endl << RESET;
+            cout << YELLOW << "Anda Keluar dari Program, bye bye :D\n";
+            cout << " /\\_/\\  " << endl;
+            cout << "( o.o ) " << endl;
+            cout << " > ^ <  " << endl << RESET;
                 return 0;
             default:
                 cout << RED << "Pilihan tidak valid!" << RESET << endl;

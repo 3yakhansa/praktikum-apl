@@ -136,7 +136,7 @@ int main()
 
     do
     {
-        cout << "\n===== MENU CRUD MAHASISWA (Struct + Sorting) =====\n";
+        cout << "\n===== MENU CRUD MAHASISWA =====\n";
         cout << "1. Tambah Mahasiswa\n";
         cout << "2. Tampilkan Mahasiswa\n";
         cout << "3. Ubah Mahasiswa\n";
